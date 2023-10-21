@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +18,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.Group; 
+
+import javafx.scene.text.Text;
+import javafx.scene.text.Font; 
+import javafx.scene.text.FontPosture; 
+import javafx.scene.text.FontWeight; 
+import javafx.scene.text.Text;
+
 
 
 public class BaccaratGame extends Application {
@@ -29,28 +37,25 @@ public class BaccaratGame extends Application {
 	private double currentBet;
 	private double totalWinnings;
 	
-	private Button fiveDollarChip;
-	private Button twentyFiveDollarChip;
-	private Button hundredDollarChip;
-	private Button fiveHundredDollarChip;
+	private Button fiveDollarChip, twentyFiveDollarChip, 
+	hundredDollarChip, fiveHundredDollarChip;
 	
 	private Button dealButton; // turns into draw once bets are placed
 	private Button clearBetButton;
 	
-	private Button tieBet;
-	private Button bankerBet;
-	private Button playerBet;
+	private Button tieBet, bankerBet, playerBet;
 	
-	private TextField balance;
-	private TextField wager;
-	private TextField winnings;
+	private Button startGame;
+	
+	private VBox welcome;
+	
+	private TextField balance, wager, winnings, welcomeMsg;
+	
+	private Text line1, line2;
+	
+	private EventHandler<ActionEvent> handler;
 	
 
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		launch(args);
-	}
 	
 //	public double evaluateWinnings() {
 //		
@@ -58,9 +63,44 @@ public class BaccaratGame extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		startGame = new Button("Start");
+		VBox start = new VBox(startGame);
+		
+		Color pokerGreen = Color.web("#477148");
+		Color casinoYellow = Color.web("#C4B454");
+		
+		line1 = new Text("Welcome To");
+		line2 = new Text("Baccarat");
+		
+	    Font font1 = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/DeLatto-0W974.ttf"), 50);
+	    Font font2 = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/CasinoShadow-Italic.ttf"), 120);
+
+	    line1.setFont(font1);
+	    line1.setX(210);
+	    line1.setY(120);
+	    
+	    line1.setStrokeWidth(1);
+	    line1.setStroke(casinoYellow);
+	    
+	    line2.setFont(font2);
+	    line2.setX(140);
+	    line2.setY(250);
+	    
+	    line2.setStrokeWidth(3);
+	    line2.setStroke(Color.BLACK);
+	    line2.setFill(casinoYellow);
+	    
+	    Group welcomeMsg = new Group(line1, line2);
+	    
 		primaryStage.setTitle("Welcome to Baccarat");
-		BorderPane root = new BorderPane();
-		Scene scene = new Scene(root, 1000, 600);
+
+//		BorderPane root = new BorderPane();
+//		root.setCenter(welcomeMsg);
+		
+		Scene scene = new Scene(welcomeMsg, 800, 600);
+		
+		scene.setFill(pokerGreen);
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -101,10 +141,12 @@ public class BaccaratGame extends Application {
 //	     
 //	     Scene scene = new Scene(root, 700,700);
 //			primaryStage.setScene(scene);
-//			primaryStage.show();
-//		
-//				
-//		
+//			primaryStage.show();	
 //	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		launch(args);
+	}
 
 }
