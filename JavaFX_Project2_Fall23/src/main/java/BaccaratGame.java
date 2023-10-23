@@ -25,6 +25,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture; 
 import javafx.scene.text.FontWeight; 
 import javafx.scene.text.Text;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Background;
+
+
 
 
 
@@ -64,46 +68,71 @@ public class BaccaratGame extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		startGame = new Button("Start");
-		VBox start = new VBox(startGame);
+		primaryStage.setTitle("It's Baccarat Time!");
 		
+		// START OF TEXT
 		Color pokerGreen = Color.web("#477148");
 		Color casinoYellow = Color.web("#C4B454");
 		
-		line1 = new Text("Welcome To");
+		line1 = new Text("Time to Play");
 		line2 = new Text("Baccarat");
 		
-	    Font font1 = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/DeLatto-0W974.ttf"), 50);
-	    Font font2 = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/CasinoShadow-Italic.ttf"), 120);
+	    Font script = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/DeLatto-0W974.ttf"), 50);
+	    Font casino = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/CasinoShadow-Italic.ttf"), 120);
+	    Font buttonScript = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/DeLatto-0W974.ttf"), 18);
 
-	    line1.setFont(font1);
-	    line1.setX(210);
+	    line1.setFont(script);
+	    line1.setX(620);
 	    line1.setY(120);
-	    
+	
 	    line1.setStrokeWidth(1);
 	    line1.setStroke(casinoYellow);
 	    
-	    line2.setFont(font2);
-	    line2.setX(140);
+	    line2.setFont(casino);
+	    line2.setX(540);
 	    line2.setY(250);
 	    
 	    line2.setStrokeWidth(3);
 	    line2.setStroke(Color.BLACK);
 	    line2.setFill(casinoYellow);
 	    
-	    Group welcomeMsg = new Group(line1, line2);
+	    Group lines = new Group(line1, line2);
 	    
-		primaryStage.setTitle("Welcome to Baccarat");
-
-//		BorderPane root = new BorderPane();
-//		root.setCenter(welcomeMsg);
+	    // END OF TEXT
+	    
+	    // START OF BUTTON
+	    
+	    startGame = new Button("Play Game");
+	    startGame.setFont(buttonScript);
+	    startGame.setPrefSize(280, 55);
+	    startGame.setAlignment(Pos.TOP_CENTER);
+	    
+	    BorderPane temp = new BorderPane();
+	    Scene gameplayScreen = new Scene(temp, 800, 600);
+	    startGame.setOnAction(e -> primaryStage.setScene(gameplayScreen));
+	    primaryStage.show();
+	    
+	    // END OF BUTTON
+	    
+		VBox welcomeMsg = new VBox(lines, startGame);	 
+		welcomeMsg.setAlignment(Pos.TOP_CENTER);
+		welcomeMsg.setSpacing(80);
 		
-		Scene scene = new Scene(welcomeMsg, 800, 600);
+		BorderPane root = new BorderPane(welcomeMsg);
 		
-		scene.setFill(pokerGreen);
+		Scene scene = new Scene(root, 800, 600);
+		
+		BackgroundFill backgroundFill = new BackgroundFill(pokerGreen, null, null);
+	    Background background = new Background(backgroundFill);
+	    root.setBackground(background);
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+	
+	public Scene createScene() {
+		BorderPane temp = new BorderPane();
+		return new Scene(temp, 800, 600);
 	}
 	
 	
