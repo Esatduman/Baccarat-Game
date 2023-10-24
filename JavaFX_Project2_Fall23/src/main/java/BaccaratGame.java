@@ -13,7 +13,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -28,6 +30,11 @@ import javafx.scene.text.Text;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Background;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
 
 
 
@@ -82,21 +89,21 @@ public class BaccaratGame extends Application {
 	    Font buttonScript = Font.loadFont(BaccaratGame.class.getResourceAsStream("/Fonts/DeLatto-0W974.ttf"), 18);
 
 	    line1.setFont(script);
-	    line1.setX(620);
-	    line1.setY(120);
+	    line1.setTranslateX(325);
+	    line1.setTranslateY(80);
 	
 	    line1.setStrokeWidth(1);
 	    line1.setStroke(casinoYellow);
 	    
 	    line2.setFont(casino);
-	    line2.setX(540);
-	    line2.setY(250);
+	    line2.setTranslateX(250);
+	    line2.setTranslateY(70);
 	    
 	    line2.setStrokeWidth(3);
 	    line2.setStroke(Color.BLACK);
 	    line2.setFill(casinoYellow);
 	    
-	    Group lines = new Group(line1, line2);
+	    VBox lines = new VBox(line1, line2);
 	    
 	    // END OF TEXT
 	    
@@ -105,7 +112,8 @@ public class BaccaratGame extends Application {
 	    startGame = new Button("Play Game");
 	    startGame.setFont(buttonScript);
 	    startGame.setPrefSize(280, 55);
-	    startGame.setAlignment(Pos.TOP_CENTER);
+	    startGame.setTranslateX(0);
+	    startGame.setTranslateY(60);
 	    
 	    BorderPane temp = new BorderPane();
 	    Scene gameplayScreen = new Scene(temp, 800, 600);
@@ -114,13 +122,38 @@ public class BaccaratGame extends Application {
 	    
 	    // END OF BUTTON
 	    
-		VBox welcomeMsg = new VBox(lines, startGame);	 
+	    // START OF IMAGES
+	    Image chips = new Image(new FileInputStream("src/main/resources/Pictures/chipStack.png"));
+	    Image cards = new Image(new FileInputStream("src/main/resources/Pictures/cards.png"));
+	    
+	    ImageView chipView = new ImageView(chips);
+	    ImageView cardView = new ImageView(cards);
+	    
+	    chipView.setFitHeight(400);
+	    chipView.setFitWidth(400);
+	    chipView.setTranslateX(200);
+	    chipView.setTranslateY(-10);
+	    
+	    cardView.setTranslateX(0);
+	    cardView.setTranslateY(-100);
+	    cardView.setFitHeight(400);
+	    cardView.setFitWidth(400);
+	    	
+	    HBox chipsImage = new HBox(chipView);
+	    
+	    HBox cardsImage = new HBox(cardView);
+	    
+	    HBox images = new HBox(cardsImage, chipsImage);
+	    
+	    // END OF IMAGES
+	    
+		VBox welcomeMsg = new VBox(lines, startGame, images);	 
 		welcomeMsg.setAlignment(Pos.TOP_CENTER);
 		welcomeMsg.setSpacing(80);
 		
 		BorderPane root = new BorderPane(welcomeMsg);
 		
-		Scene scene = new Scene(root, 800, 600);
+		Scene scene = new Scene(root, 1000, 800);
 		
 		BackgroundFill backgroundFill = new BackgroundFill(pokerGreen, null, null);
 	    Background background = new Background(backgroundFill);
