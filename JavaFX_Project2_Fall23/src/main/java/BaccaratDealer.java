@@ -23,4 +23,3 @@ public class BaccaratDealer extends Card{
 		
 	}
 }
-
