@@ -67,10 +67,37 @@ public class BaccaratGame extends Application {
 	private EventHandler<ActionEvent> handler;
 	
 
+	// default constructor
+	public BaccaratGame() {
+		playerHand = new ArrayList<>();
+		bankerHand = new ArrayList<>();
+		theDealer = new BaccaratDealer();
+		gameLogic = new BaccaratGameLogic();
+		currentBet = 0.0;
+		totalWinnings = 0.0;
+	}
 	
-//	public double evaluateWinnings() {
-//		
-//	}
+	public void dealStartingHands() {
+		playerHand.add(theDealer.drawOne());
+		bankerHand.add(theDealer.drawOne());
+		playerHand.add(theDealer.drawOne());
+		bankerHand.add(theDealer.drawOne());
+	}
+	
+	public double evaluateWinnings() {
+		String winner = gameLogic.whoWon(playerHand, bankerHand);
+		double currentWinnings = 0.0;
+		
+		if (winner.equals("Player")) {
+			currentWinnings = currentBet * 2;
+		} else if (winner.equals("Banker")) {
+			currentWinnings = currentBet * 1.95;
+		}
+		
+		totalWinnings += currentWinnings;
+		
+		return currentWinnings;
+	}	
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -266,6 +293,28 @@ public class BaccaratGame extends Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
+		
+// TESTING TO SEE IF CLASSES ARE WORKING 
+		
+//		BaccaratDealer dealer = new BaccaratDealer();
+
+//        // Generate a deck and shuffle it
+//        dealer.generateDeck();
+//        dealer.shuffleDeck();
+//
+//        // Draw and display one card
+//        Card card1 = dealer.drawOne();
+//        System.out.println("Drew a card: " + card1.suite + " " + card1.value);
+//
+//        // Deal a hand (two cards) and display them
+//        ArrayList<Card> hand = dealer.dealHand();
+//        System.out.println("Dealt hand:");
+//        for (Card card : hand) {
+//            System.out.println(card.suite + " " + card.value);
+//        }
+//
+//        // Display the remaining deck size
+//        System.out.println("Remaining deck size: " + dealer.deckSize());
 	}
 
 }

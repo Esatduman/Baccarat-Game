@@ -1,8 +1,10 @@
+
 public class Card {
-	private String suite;
-	private int value;
+	String suite;
+	int value;
 	
 	Card(String theSuite, int theValue){
-		
+		suite = theSuite;
+		value = theValue;
 	}
 }
