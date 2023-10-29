@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -48,13 +49,16 @@ public class BaccaratGame extends Application {
 	private double currentBet;
 	private double totalWinnings;
 	
+	private double wagerMoney;
+	
 	private Button fiveDollarChip, twentyFiveDollarChip, 
 	hundredDollarChip, fiveHundredDollarChip;
 	
-	private Button dealButton; // turns into draw once bets are placed
+	private Button dealButton, draw, player, dealer_b; // turns into draw once bets are placed
 	private Button clearBetButton;
 	
 	private Button tieBet, bankerBet, playerBet;
+	private Button drawCard;
 	
 	private Button startGame;
 	
@@ -64,40 +68,19 @@ public class BaccaratGame extends Application {
 	
 	private Text line1, line2;
 	
+	private Text wagerText; 
 	private EventHandler<ActionEvent> handler;
 	
+	private double totalMoney = 10000;
+	private double game_winnings = 0;
+	
+	private Text moneyText;
 
-	// default constructor
-	public BaccaratGame() {
-		playerHand = new ArrayList<>();
-		bankerHand = new ArrayList<>();
-		theDealer = new BaccaratDealer();
-		gameLogic = new BaccaratGameLogic();
-		currentBet = 0.0;
-		totalWinnings = 0.0;
-	}
+	private ImageView drawnCardImageView;
 	
-	public void dealStartingHands() {
-		playerHand.add(theDealer.drawOne());
-		bankerHand.add(theDealer.drawOne());
-		playerHand.add(theDealer.drawOne());
-		bankerHand.add(theDealer.drawOne());
-	}
-	
-	public double evaluateWinnings() {
-		String winner = gameLogic.whoWon(playerHand, bankerHand);
-		double currentWinnings = 0.0;
-		
-		if (winner.equals("Player")) {
-			currentWinnings = currentBet * 2;
-		} else if (winner.equals("Banker")) {
-			currentWinnings = currentBet * 1.95;
-		}
-		
-		totalWinnings += currentWinnings;
-		
-		return currentWinnings;
-	}	
+//	public double evaluateWinnings() {
+//		
+//	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -250,9 +233,19 @@ public class BaccaratGame extends Application {
 			//fiveHundred_B.setTranslateY(300);
 			fiveHundred_B.setGraphic(v4);
 			// Buttons finish
+			 VBox chipTokens = new VBox(fiveButton, twentyFive_B, hundredButton, fiveHundred_B);
+		
+			// Buttons for betting 
+			 draw = new Button("Bet For Draw"); // draw button
+			 draw.setTranslateX(-280);
+			 player = new Button("Bet For Player"); // bet for player button 
+			 player.setTranslateX(-280);
+			 dealer_b = new Button("Bet For Dealer"); // bet for dealer 
+			 dealer_b.setTranslateX(-280);
+			 VBox betButtons = new VBox(draw,player,dealer_b);
 			
-			Text gamePlayer = new Text("Player");
-				gamePlayer.setTranslateX(210);
+			Text gamePlayer = new Text("Player"); // Player Text 
+				gamePlayer.setTranslateX(150);
 			    gamePlayer.setTranslateY(25);
 			    gamePlayer.setStrokeWidth(1);
 			    gamePlayer.setFill(casinoYellow);
@@ -260,7 +253,7 @@ public class BaccaratGame extends Application {
 			    gamePlayer.setStroke(Color.BLACK);
 		   
 		    
-		    Text dealerPlayer = new Text("Dealer");
+		    Text dealerPlayer = new Text("Dealer"); // Dealer Text 
 		    dealerPlayer.setTranslateX(400);
 		    dealerPlayer.setTranslateY(25);
 		    dealerPlayer.setStrokeWidth(1);
@@ -271,14 +264,60 @@ public class BaccaratGame extends Application {
 		    
 
 		    // Adjust the Y translation to position it as desired
+		    dealButton = new Button("Deal"); // Button will draw a card each time
+		    //dealButton.setPrefSize(30,30);
+		    dealButton.setTranslateX(320);
+		    dealButton.setTranslateY(25);
 		    
-			
+		    drawCard = new Button("Draw Card"); // draw card button
+		    drawCard.setTranslateX(420);
+		    drawCard.setTranslateY(25);
 		    
-			Rectangle rectangle = new Rectangle(800,60); // button menu dark green
+		    //rectangle for the cards
+		    Rectangle card_rectangle1 = new Rectangle(200,250);
+		    card_rectangle1.setFill(null);
+		    card_rectangle1.setStroke(Color.WHITE);
+		    card_rectangle1.setStrokeWidth(3);
+		    card_rectangle1.setTranslateX(-115);
+		    
+		    Rectangle card_rectangle2 = new Rectangle(200,250);
+		    card_rectangle2.setFill(null);
+		    card_rectangle2.setStroke(Color.WHITE);
+		    card_rectangle2.setTranslateX(44);
+		    card_rectangle2.setStrokeWidth(3);
+		    HBox cardBox = new HBox(chipTokens, gameText, card_rectangle1, card_rectangle2, betButtons);
+		   // cardBox.setSpacing(30);
+		    
+		    
+		    
+		    // action 
+		    drawCard.setOnAction(e -> drawCardAction());
+	        drawnCardImageView = new ImageView();
+	        drawnCardImageView.setFitHeight(150);
+	        drawnCardImageView.setFitWidth(100);
+	        
+	        
+		    //Total Money
+	         wagerText = new Text("Total Wager: $" + wagerMoney);
+	         wagerText.setFill(Color.WHITE);
+		     wagerText.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+		     wagerText.setTranslateX(550);
+		     wagerText.setTranslateY(25); // Adjust Y position as needed
+		     
+		    
+		     moneyText = new Text("Total Money: $" + totalMoney + "\nWinnings: $" + game_winnings);
+		     moneyText.setTranslateX(10);
+		     moneyText.setTranslateY(25); // Adjust Y position as needed
+		     moneyText.setFill(Color.WHITE);
+		     moneyText.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+		    
+			Rectangle rectangle = new Rectangle(800,78); // button menu dark green
 			rectangle.setFill(Color.DARKGREEN);	
 			
-			
-			VBox buttonContainer = new VBox(6, gameText, fiveButton, twentyFive_B, hundredButton, fiveHundred_B, rectangle);
+			StackPane moneyContainer = new StackPane(rectangle, moneyText, dealButton, drawCard, wagerText);
+			 moneyContainer.setAlignment(Pos.TOP_LEFT); 
+			 
+			VBox buttonContainer = new VBox(8, cardBox, moneyContainer);
 			buttonContainer.setAlignment(Pos.BOTTOM_LEFT);
 			buttonContainer.setStyle("-fx-background-color:#477148;");
 			
@@ -288,33 +327,14 @@ public class BaccaratGame extends Application {
 			
 	}
 	
+	private void drawCardAction() {
+        
+    }
 
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
-		
-// TESTING TO SEE IF CLASSES ARE WORKING 
-		
-//		BaccaratDealer dealer = new BaccaratDealer();
-
-//        // Generate a deck and shuffle it
-//        dealer.generateDeck();
-//        dealer.shuffleDeck();
-//
-//        // Draw and display one card
-//        Card card1 = dealer.drawOne();
-//        System.out.println("Drew a card: " + card1.suite + " " + card1.value);
-//
-//        // Deal a hand (two cards) and display them
-//        ArrayList<Card> hand = dealer.dealHand();
-//        System.out.println("Dealt hand:");
-//        for (Card card : hand) {
-//            System.out.println(card.suite + " " + card.value);
-//        }
-//
-//        // Display the remaining deck size
-//        System.out.println("Remaining deck size: " + dealer.deckSize());
 	}
 
 }

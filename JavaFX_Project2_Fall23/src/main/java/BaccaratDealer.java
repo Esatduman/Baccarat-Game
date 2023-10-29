@@ -45,4 +45,3 @@ public class BaccaratDealer{
 		return deck.size();
 	}
 }
-
