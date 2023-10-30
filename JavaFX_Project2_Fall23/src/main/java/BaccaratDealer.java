@@ -10,11 +10,20 @@ public class BaccaratDealer{
 	}
 	
 	public void generateDeck() {
-		String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
+		String[] suits = {"hearts", "diamonds", "clubs", "spades"};
 		for (String suit : suits) {
 			for (int i = 1; i <= 13; i++) {
-				deck.add(new Card(suit, i));
+				if (deck.size() <= 52) {
+					deck.add(new Card(suit, i));
+				}
 			}
+		}
+	}
+	
+	public void printDeck() {
+		BaccaratDealer newDeck = new BaccaratDealer(); 
+		for (Card card : newDeck.deck) {
+			System.out.println(card.value + card.suite);
 		}
 	}
 	
